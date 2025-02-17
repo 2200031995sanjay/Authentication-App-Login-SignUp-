@@ -12,8 +12,8 @@ const firebaseConfig = {
     measurementId: "G-9QCQH1F3VJ"
   };
 
-  initializeApp(firebaseConfig);
-  const auth = getAuth();
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
 export default function AuthApp() {
 
@@ -29,9 +29,13 @@ export default function AuthApp() {
             if(isLogin){
                 await signInWithEmailAndPassword(auth, email, password);
                 alert("Logged in successfully");
+                setEmail("");
+                setPassword("");
             }else{
                 await createUserWithEmailAndPassword(auth, email, password);
                 alert("Account created successfully!");
+                setEmail("");
+                setPassword("");
             }
         }catch(err){
             setError(err.message);
@@ -48,7 +52,7 @@ export default function AuthApp() {
       <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ width: "100%", padding: "8px", marginBottom: "10px" }} />
       <button type="submit" style={{ background: "#c03221", color: "white", padding: "10px", width: "100%", border: "none", borderRadius: "4px" }}>{isLogin ? "Login" : "Sign Up"}</button>
       <p style={{marginTop:"10px"}}>
-        {isLogin? "Don't have an account?":"Already have an account"}<span onClick={()=> setLogin(!isLogin)} style={{color:"#c03221", cursor:"pointer"}}>{isLogin? "Sign Up": "Login"}</span>
+        {isLogin? "Don't have an account?":"Already have an account"}<span onClick={()=>{ setLogin(!isLogin), setEmail(""), setPassword("")}} style={{color:"#c03221", cursor:"pointer"}}>{isLogin? "Sign Up": "Login"}</span>
       </p>
         </form>
 
